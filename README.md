@@ -9,10 +9,7 @@ No dependencies.
 
 2. Enable the logout_check module at administer > modules
 
-3. Ensure the correct admin users have permissions to administer the logout_check module at
-  administer > people > permissions
-
-4. Set-up the module at administer > configure > people > logout_check
+3. Set-up the module at admin/config/people/logout_check
 
 ## to dos
 - add a check to only do on foreground tab or on mouse move, maybe... because the user could logout and log back in and the session wouldn't match on form submit ...
