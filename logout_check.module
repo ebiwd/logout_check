@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * Used to automagically log out a user after a preset time.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function logout_check_menu() {
+  $items = array();
+
+  $items['admin/config/people/logout_check'] = array(
+    'title' => 'Logout Check and Notify',
+    'description' => 'Administer Logout Check and Notify settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('logout_check_settings'),
+    'access arguments' => array('administer logout_check'),
+    'file' => 'logout_check.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_init().
+ */
+function logout_check_init() {
+  global $user;
+
+  // hey stupid, only check if logged in users are logged in.
+  if (empty($user->uid)) {
+    return;
+  }
+
+  $now = date('D M d Y H:i:s O'); // date in JS format
+  $check_url = variable_get('logout_check_check_url', 'user/login');
+  drupal_add_library('system', 'ui.dialog');
+
+  // Get all settings JS will need for dialog.
+  $settings = array(
+    'logout_check_interval' => variable_get('logout_check_interval', 5000),
+    'time_page_loaded' => $now,
+    'title' => t(variable_get('logout_check_message_title', 'You are no longer logged in')),
+    'message' => t(variable_get('logout_check_message_body', 'Any information submitted on this form will not be saved')),
+    'check_url' => url('user/'.$user->uid.'/edit'),
+    'site-title' => t('@name Alert', array('@name' => variable_get('site_name', 'Drupal'))),
+  );
+
+
+  // drupal_add_library('system', 'drupal.ajax');
+  drupal_add_js(array('logout_check' => $settings), 'setting');
+  drupal_add_js(drupal_get_path('module', 'logout_check') . "/logout_check.js");
+
+}

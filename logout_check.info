@@ -1,0 +1,4 @@
+name = Logout Check and Notify
+description = Check if a user has logged out sense the page was loaded, if so warn them
+core = 7.x
+configure = admin/config/people/logout_check

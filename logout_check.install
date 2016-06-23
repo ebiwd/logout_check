@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install file for JS Logout Check Module
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function logout_check_uninstall() {
+  variable_del('logout_check_interval');
+  variable_del('logout_check_message_title');
+  variable_del('logout_check_message_body');
+}
